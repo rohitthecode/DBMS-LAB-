@@ -1,0 +1,77 @@
+# Create the database
+create database assignment02;
+Query OK, 1 row affected (0.04 sec)
+
+# Attempt to use the database with an error
+use database assignment02;
+ERROR 1049 (42000): Unknown database 'database'
+
+# Correctly use the database
+use assignment02;
+Database changed
+
+# Create the 'Client_Master' table
+CREATE TABLE Client_Master (
+    ClientNO VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Address VARCHAR(255),
+    City VARCHAR(50),
+    State VARCHAR(50),
+    bal_due DECIMAL(10, 2)
+);
+Query OK, 0 rows affected (0.07 sec)
+
+# Insert data into 'Client_Master'
+INSERT INTO Client_Master (ClientNO, Name, Address, City, State, bal_due) VALUES
+('C001', 'John Doe', '123 Main St', 'Anytown', 'CA', 4500.00),
+('C002', 'Jane Smith', '456 Elm St', 'Smallville', 'NY', 7500.00),
+('C003', 'Michael Johnson', '789 Oak St', 'Bigtown', 'TX', 3000.00),
+('C004', 'Emily Davis', '246 Pine St', 'Villagetown', 'FL', 6500.00),
+('C005', 'David Brown', '135 Cedar St', 'Hometown', 'WA', 500.00);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+# Select all from 'Client_Master'
+SELECT * FROM Client_Master;
++----------+-----------------+--------------+-------------+-------+---------+
+| ClientNO | Name            | Address      | City        | State | bal_due |
++----------+-----------------+--------------+-------------+-------+---------+
+| C001     | John Doe        | 123 Main St  | Anytown     | CA    | 4500.00 |
+| C002     | Jane Smith      | 456 Elm St   | Smallville  | NY    | 7500.00 |
+| C003     | Michael Johnson | 789 Oak St   | Bigtown     | TX    | 3000.00 |
+| C004     | Emily Davis     | 246 Pine St  | Villagetown | FL    | 6500.00 |
+| C005     | David Brown     | 135 Cedar St | Hometown    | WA    |  500.00 |
++----------+-----------------+--------------+-------------+-------+---------+
+5 rows in set (0.00 sec)
+
+# Select clients with balance due greater than 5000
+SELECT Name FROM Client_Master WHERE bal_due &gt; 5000;
++-------------+
+| Name        |
++-------------+
+| Jane Smith  |
+| Emily Davis |
++-------------+
+2 rows in set (0.00 sec)
+
+# Update balance due for client 'C002'
+UPDATE Client_Master SET bal_due = 5100.00 WHERE ClientNO = 'C002';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+# Rename table 'Client_Master' to 'Client12'
+ALTER TABLE Client_Master RENAME TO Client12;
+Query OK, 0 rows affected (0.05 sec)
+
+# Select all from 'Client12' with balance as 'BALANCE'
+SELECT ClientNO, Name, Address, City, State, bal_due AS "BALANCE" FROM Client12;
++----------+-----------------+--------------+-------------+-------+---------+
+| ClientNO | Name            | Address      | City        | State | BALANCE |
++----------+-----------------+--------------+-------------+-------+---------+
+| C001     | John Doe        | 123 Main St  | Anytown     | CA    | 4500.00 |
+| C002     | Jane Smith      | 456 Elm St   | Smallville  | NY    | 5100.00 |
+| C003     | Michael Johnson | 789 Oak St   | Bigtown     | TX    | 3000.00 |
+| C004     | Emily Davis     | 246 Pine St  | Villagetown | FL    | 6500.00 |
+| C005     | David Brown     | 135 Cedar St | Hometown    | WA    |  500.00 |
++----------+-----------------+--------------+-------------+-------+---------+
+5 rows in set (0.00 sec)

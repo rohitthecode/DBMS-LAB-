@@ -1,0 +1,40 @@
+# Insert data into 'Teacher'
+INSERT INTO Teacher (Name, DeptNo, Date_of_joining, DeptName, Location, Salary) VALUES
+('John Doe', 101, '2020-01-15', 'Mathematics', 'Building A', 50000.00),
+('Jane Smith', 102, '2018-05-20', 'Physics', 'Building B', 60000.00),
+('Michael Johnson', 103, '2019-08-10', 'Chemistry', 'Building C', 55000.00),
+('Emily Davis', 104, '2021-03-25', 'Commerce', 'Building D', 48000.00),
+('David Brown', 105, '2017-11-30', 'Biology', 'Building E', 52000.00);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+# Update salary for 'Mathematics' department
+UPDATE Teacher SET Salary = Salary * 1.25 WHERE DeptName = 'Mathematics';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+# Rollback the previous update
+ROLLBACK;
+Query OK, 0 rows affected (0.01 sec)
+
+# Update salary for 'Commerce' department
+UPDATE Teacher SET Salary = Salary * 1.15 WHERE DeptName = 'Commerce';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+# Commit the transaction
+COMMIT;
+Query OK, 0 rows affected (0.00 sec)
+
+# Select all from 'Teacher'
+SELECT * FROM Teacher;
++----+-----------------+--------+-----------------+-------------+------------+----------+
+| Id | Name            | DeptNo | Date_of_joining | DeptName    | Location   | Salary   |
++----+-----------------+--------+-----------------+-------------+------------+----------+
+|  1 | John Doe        |    101 | 2020-01-15      | Mathematics | Building A | 62500.00 |
+|  2 | Jane Smith      |    102 | 2018-05-20      | Physics     | Building B | 60000.00 |
+|  3 | Michael Johnson |    103 | 2019-08-10      | Chemistry   | Building C | 55000.00 |
+|  4 | Emily Davis     |    104 | 2021-03-25      | Commerce    | Building D | 55200.00 |
+|  5 | David Brown     |    105 | 2017-11-30      | Biology     | Building E | 52000.00 |
++----+-----------------+--------+-----------------+-------------+------------+----------+
+5 rows in set (0.00 sec)

@@ -1,0 +1,547 @@
+# Connect to MySQL
+
+mysql -u <username> -p
+
+# Using 'root' user
+
+mysql -u root -p
+
+# Show table status
+
+SHOW TABLE STATUS LIKE 'student';
+
+# Error when no database selected
+
+ERROR 1046 (3D000): No database selected
+
+# Select database 'dhiraj'
+
+use dhiraj
+
+# Show table status again
+
+SHOW TABLE STATUS LIKE 'student';
+
+# Output
++---------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+----------------+---------+
+| Name    | Engine | Version | Row_format | Rows | Avg_row_length | Data_length | Max_data_length | Index_length | Data_free | Auto_increment | Create_time         | Update_time | Check_time | Collation          | Checksum | Create_options | Comment |
++---------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+----------------+---------+
+| student | InnoDB |      10 | Dynamic    |    0 |              0 |       16384 |               0 |            0 |         0 |           NULL | 2024-07-02 00:08:02 | NULL        | NULL       | utf8mb4_0900_ai_ci |     NULL |                |         |
++---------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+-------------+------------+--------------------+----------+----------------+---------+
+
+# Describe table 'emp'
+
+desc emp;
+
+# Output
+
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empno      | int         | NO   | PRI | NULL    |       |
+| ename      | varchar(30) | YES  |     | NULL    |       |
+| job        | varchar(12) | YES  |     | NULL    |       |
+| deptno     | int         | YES  |     | NULL    |       |
+| sal        | int         | YES  |     | NULL    |       |
+| experience | int         | YES  |     | NULL    |       |
+| phone_no   | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+
+# Show full columns from 'emp'
+
+show full columns from emp;
+
+# Output
+
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field      | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| empno      | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| ename      | varchar(30) | utf8mb3_general_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| job        | varchar(12) | utf8mb3_general_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| deptno     | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| sal        | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| experience | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| phone_no   | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+
+# Alter table 'emp', modify column 'ename'
+
+alter table emp modify column ename nvarchar(30) not null;
+
+# Output
+
+Query OK, 0 rows affected, 1 warning (0.15 sec)
+
+# Show full columns from 'emp' again
+
+show full columns from emp;
+
+# Output
+
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field      | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| empno      | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| ename      | nvarchar(30)| utf8mb3_general_ci | NO   |     | NULL    |       | select,insert,update,references |         |
+| job        | varchar(12) | utf8mb3_general_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| deptno     | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| sal        | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| experience | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| phone_no   | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+
+# Modify column 'ename' again
+
+alter table emp modify column ename nvarchar(30) null;
+
+# Output
+
+Query OK, 0 rows affected, 1 warning (0.11 sec)
+
+# Insert data into 'emp'
+
+insert into emp (empno ,ename, job, deptno, sal) VALUES
+(1, 'Amit', 'software engineer' ,1,10000),
+(2, 'Rahul', 'teacher' ,2,20000),
+(3, 'Monika', 'doctor' ,3,30000),
+(4, 'Apekshya', 'developer' ,4,40000),
+(5, 'Dinesh', 'tester' ,5,50000),
+(6, 'Simran', 'DBA' ,6,60000),
+(7, 'Hari' , 'manager' , 7,70000),
+(8,'Ashim','CTO',8,64000),
+(9,'Govinda','CFO',9,45000),
+(10,'Samundra', 'CEO',10,100000);
+
+# Error: Data too long for column 'job' at row 1
+
+ERROR 1406 (22001): Data too long for column 'job' at row 1
+
+# Insert data with corrected 'job' lengths
+
+insert into emp (empno ,ename, job, deptno, sal) VALUES
+(1, 'Amit', 'softwareeng' ,1,10000),
+(2, 'Rahul', 'teacher' ,2,20000),
+(3, 'Monika', 'doctor' ,3,30000),
+(4, 'Apekshya', 'developer' ,4,40000),
+(5, 'Dinesh', 'tester' ,5,50000),
+(6, 'Simran', 'DBA' ,6,60000),
+(7, 'Hari' , 'manager' , 7,70000),
+(8,'Ashim','CTO',8,64000),
+(9,'Govinda','CFO',9,45000),
+(10,'Samundra', 'CEO',10,100000);
+
+# Output
+
+Query OK, 10 rows affected (0.03 sec)
+
+# Show full columns from 'emp'
+
+show full columns from emp;
+
+# Output
+
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| Field      | Type        | Collation          | Null | Key | Default | Extra | Privileges                      | Comment |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+| empno      | int         | NULL               | NO   | PRI | NULL    |       | select,insert,update,references |         |
+| ename      | varchar(30) | utf8mb3_general_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| job        | varchar(12) | utf8mb3_general_ci | YES  |     | NULL    |       | select,insert,update,references |         |
+| deptno     | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| sal        | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| experience | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
+| phone_no   | int         | NULL               | YES  |     | NULL    |       | select,insert,update,references |         |
++------------+-------------+--------------------+------+-----+---------+-------+---------------------------------+---------+
+
+# Select all records from 'emp'
+
+select * from emp;
+
+# Output
+
++-------+----------+-------------+--------+--------+------------+----------+
+| empno | ename    | job         | deptno | sal    | experience | phone_no |
++-------+----------+-------------+--------+--------+------------+----------+
+|     1 | Amit     | softwareeng |      1 |  10000 |       NULL |     NULL |
+|     2 | Rahul    | teacher     |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor      |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer   |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester      |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA         |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager     |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO         |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO         |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO         |     10 | 100000 |       NULL |     NULL |
++-------+----------+-------------+--------+--------+------------+----------+
+
+# Select distinct 'job' from 'emp'
+
+select distinct job from emp;
+
+# Output
+
++-------------+
+| job         |
++-------------+
+| softwareeng |
+| teacher     |
+| doctor      |
+| developer   |
+| tester      |
+| DBA         |
+| manager     |
+| CTO         |
+| CFO         |
+| CEO         |
++-------------+
+
+# Select distinct 'sal' from 'emp'
+
+select distinct sal from emp;
+
+# Output
+
++--------+
+| sal    |
++--------+
+|  10000 |
+|  20000 |
+|  30000 |
+|  40000 |
+|  50000 |
+|  60000 |
+|  70000 |
+|  64000 |
+|  45000 |
+| 100000 |
++--------+
+
+# Select 'empno' and 'ename' where 'sal' > 30000
+
+select empno, ename from emp where sal>30000;
+
+# Output
+
++-------+----------+
+| empno | ename    |
++-------+----------+
+|     4 | Apekshya |
+|     5 | Dinesh   |
+|     6 | Simran   |
+|     7 | Hari     |
+|     8 | Ashim    |
+|     9 | Govinda  |
+|    10 | Samundra |
++-------+----------+
+
+# Select 'empno' and 'ename' ordered by 'empno'
+
+select empno, ename from emp order by empno;
+
+# Output
+
++-------+----------+
+| empno | ename    |
++-------+----------+
+|     1 | Amit     |
+|     2 | Rahul    |
+|     3 | Monika   |
+|     4 | Apekshya |
+|     5 | Dinesh   |
+|     6 | Simran   |
+|     7 | Hari     |
+|     8 | Ashim    |
+|     9 | Govinda  |
+|    10 | Samundra |
++-------+----------+
+
+# Select 'empno' and 'ename' ordered by 'empno' descending
+
+select empno, ename from emp order by empno desc;
+
+# Output
+
++-------+----------+
+| empno | ename    |
++-------+----------+
+|    10 | Samundra |
+|     9 | Govinda  |
+|     8 | Ashim    |
+|     7 | Hari     |
+|     6 | Simran   |
+|     5 | Dinesh   |
+|     4 | Apekshya |
+|     3 | Monika   |
+|     2 | Rahul    |
+|     1 | Amit     |
++-------+----------+
+
+# Creating a New Table Like 'emp'
+
+mysql> create table newtable LIKE emp;
+
+Query OK, 0 rows affected (0.07 sec)
+
+# Describe New Table 'newtable'
+
+mysql> desc newtable;
+
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empno      | int         | NO   | PRI | NULL    |       |
+| ename      | varchar(30) | YES  |     | NULL    |       |
+| job        | varchar(12) | YES  |     | NULL    |       |
+| deptno     | int         | YES  |     | NULL    |       |
+| sal        | int         | YES  |     | NULL    |       |
+| experience | int         | YES  |     | NULL    |       |
+| phone_no   | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
+Empty set (0.00 sec)
+
+# Create Table 'newtable2' from 'emp'
+
+mysql> create table newtable2 as select * from emp;
+
+Query OK, 10 rows affected (0.06 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+# Describe New Table 'newtable2'
+
+mysql> desc newtable2;
+
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empno      | int         | NO   |     | NULL    |       |
+| ename      | varchar(30) | YES  |     | NULL    |       |
+| job        | varchar(12) | YES  |     | NULL    |       |
+| deptno     | int         | YES  |     | NULL    |       |
+| sal        | int         | YES  |     | NULL    |       |
+| experience | int         | YES  |     | NULL    |       |
+| phone_no   | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+# Select All from 'newtable2'
+
+mysql> select * from newtable2;
+
++-------+----------+-------------+--------+--------+------------+----------+
+| empno | ename    | job         | deptno | sal    | experience | phone_no |
++-------+----------+-------------+--------+--------+------------+----------+
+|     1 | Amit     | softwareeng |      1 |  10000 |       NULL |     NULL |
+|     2 | Rahul    | teacher     |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor      |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer   |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester      |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA         |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager     |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO         |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO         |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO         |     10 | 100000 |       NULL |     NULL |
++-------+----------+-------------+--------+--------+------------+----------+
+10 rows in set (0.00 sec)
+
+# Insert Data into 'newtable'
+
+mysql> insert into newtable select * from emp;
+
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
+
++-------+----------+-------------+--------+--------+------------+----------+
+| empno | ename    | job         | deptno | sal    | experience | phone_no |
++-------+----------+-------------+--------+--------+------------+----------+
+|     1 | Amit     | softwareeng |      1 |  10000 |       NULL |     NULL |
+|     2 | Rahul    | teacher     |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor      |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer   |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester      |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA         |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager     |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO         |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO         |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO         |     10 | 100000 |       NULL |     NULL |
++-------+----------+-------------+--------+--------+------------+----------+
+10 rows in set (0.00 sec)
+
+# Update 'emp' Table
+
+mysql> update emp set ename='Krishna' where empno=1;
+
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+# Select All from 'emp'
+
+mysql> select * from emp;
+
++-------+----------+-------------+--------+--------+------------+----------+
+| empno | ename    | job         | deptno | sal    | experience | phone_no |
++-------+----------+-------------+--------+--------+------------+----------+
+|     1 | Krishna  | softwareeng |      1 |  10000 |       NULL |     NULL |
+|     2 | Rahul    | teacher     |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor      |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer   |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester      |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA         |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager     |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO         |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO         |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO         |     10 | 100000 |       NULL |     NULL |
++-------+----------+-------------+--------+--------+------------+----------+
+10 rows in set (0.00 sec)
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
++-------+----------+-------------+--------+--------+------------+----------+
+| empno | ename    | job         | deptno | sal    | experience | phone_no |
++-------+----------+-------------+--------+--------+------------+----------+
+|     1 | Amit     | softwareeng |      1 |  10000 |       NULL |     NULL |
+|     2 | Rahul    | teacher     |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor      |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer   |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester      |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA         |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager     |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO         |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO         |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO         |     10 | 100000 |       NULL |     NULL |
++-------+----------+-------------+--------+--------+------------+----------+
+10 rows in set (0.00 sec)
+
+# Delete from 'newtable'
+
+mysql> delete from newtable where empno=1;
+
+Query OK, 1 row affected (0.02 sec)
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
++-------+----------+-----------+--------+--------+------------+----------+
+| empno | ename    | job       | deptno | sal    | experience | phone_no |
++-------+----------+-----------+--------+--------+------------+----------+
+|     2 | Rahul    | teacher   |      2 |  20000 |       NULL |     NULL |
+|     3 | Monika   | doctor    |      3 |  30000 |       NULL |     NULL |
+|     4 | Apekshya | developer |      4 |  40000 |       NULL |     NULL |
+|     5 | Dinesh   | tester    |      5 |  50000 |       NULL |     NULL |
+|     6 | Simran   | DBA       |      6 |  60000 |       NULL |     NULL |
+|     7 | Hari     | manager   |      7 |  70000 |       NULL |     NULL |
+|     8 | Ashim    | CTO       |      8 |  64000 |       NULL |     NULL |
+|     9 | Govinda  | CFO       |      9 |  45000 |       NULL |     NULL |
+|    10 | Samundra | CEO       |     10 | 100000 |       NULL |     NULL |
++-------+----------+-----------+--------+--------+------------+----------+
+9 rows in set (0.00 sec)
+
+# Update Salary in 'newtable' by 10%
+
+mysql> update newtable set sal=sal*1.10;
+
+Query OK, 9 rows affected (0.03 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
++-------+----------+-----------+--------+--------+------------+----------+
+| empno | ename    | job       | deptno | sal    | experience | phone_no |
++-------+----------+-----------+--------+--------+------------+----------+
+|     2 | Rahul    | teacher   |      2 |  22000 |       NULL |     NULL |
+|     3 | Monika   | doctor    |      3 |  33000 |       NULL |     NULL |
+|     4 | Apekshya | developer |    4 |  44000 |       NULL |     NULL |
+|     5 | Dinesh   | tester    |      5 |  55000 |       NULL |     NULL |
+|     6 | Simran   | DBA       |      6 |  66000 |       NULL |     NULL |
+|     7 | Hari     | manager   |      7 |  77000 |       NULL |     NULL |
+|     8 | Ashim    | CTO       |      8 |  70400 |       NULL |     NULL |
+|     9 | Govinda  | CFO       |      9 |  49500 |       NULL |     NULL |
+|    10 | Samundra | CEO       |     10 | 110000 |       NULL |     NULL |
++-------+----------+-----------+--------+--------+------------+----------+
+9 rows in set (0.00 sec)
+
+# Delete Records with Salary Less than 20000
+
+mysql> delete from newtable where sal<20000;
+
+Query OK, 0 rows affected (0.00 sec)
+
+# Select All from 'newtable'
+
+mysql> select * from newtable;
+
++-------+----------+-----------+--------+--------+------------+----------+
+| empno | ename    | job       | deptno | sal    | experience | phone_no |
++-------+----------+-----------+--------+--------+------------+----------+
+|     2 | Rahul    | teacher   |      2 |  22000 |       NULL |     NULL |
+|     3 | Monika   | doctor    |      3 |  33000 |       NULL |     NULL |
+|     4 | Apekshya | developer |      4 |  44000 |       NULL |     NULL |
+|     5 | Dinesh   | tester    |      5 |  55000 |       NULL |     NULL |
+|     6 | Simran   | DBA       |      6 |  66000 |       NULL |     NULL |
+|     7 | Hari     | manager   |      7 |  77000 |       NULL |     NULL |
+|     8 | Ashim    | CTO       |      8 |  70400 |       NULL |     NULL |
+|     9 | Govinda  | CFO       |      9 |  49500 |       NULL |     NULL |
+|    10 | Samundra | CEO       |     10 | 110000 |       NULL |     NULL |
++-------+----------+-----------+--------+--------+------------+----------+
+9 rows in set (0.00 sec)
+
+# Display Employees Whose Name Starts with 'A'
+
+mysql> select * from newtable where ename like 'A%';
+
++-------+----------+-----------+--------+-------+------------+----------+
+| empno | ename    | job       | deptno | sal   | experience | phone_no |
++-------+----------+-----------+--------+-------+------------+----------+
+|     4 | Apekshya | developer |      4 | 44000 |       NULL |     NULL |
+|     8 | Ashim    | CTO       |      8 | 70400 |       NULL |     NULL |
++-------+----------+-----------+--------+-------+------------+----------+
+2 rows in set (0.00 sec)
+
+# Display Employees Whose Name Ends with 'a'
+
+mysql> select * from newtable where ename like '%a';
+
++-------+----------+-----------+--------+--------+------------+----------+
+| empno | ename    | job       | deptno | sal    | experience | phone_no |
++-------+----------+-----------+--------+--------+------------+----------+
+|     3 | Monika   | doctor    |      3 |  33000 |       NULL |     NULL |
+|     4 | Apekshya | developer |      4 |  44000 |       NULL |     NULL |
+|     9 | Govinda  | CFO       |      9 |  49500 |       NULL |     NULL |
+|    10 | Samundra | CEO       |     10 | 110000 |       NULL |     NULL |
++-------+----------+-----------+--------+--------+------------+----------+
+4 rows in set (0.00 sec)
+
+# Display Employees Whose Name Starts with 's' and Ends with 'a'
+
+mysql> select * from newtable where ename like 's%a';
+
++-------+----------+------+--------+--------+------------+----------+
+| empno | ename    | job  | deptno | sal    | experience | phone_no |
++-------+----------+------+--------+--------+------------+----------+
+|    10 | Samundra | CEO  |     10 | 110000 |       NULL |     NULL |
++-------+----------+------+--------+--------+------------+----------+
+1 row in set (0.00 sec)
+
+# Display Employees Whose Second Alphabet of Name is 'a'
+
+mysql> select * from newtable where ename like '_a%';
+
++-------+----------+---------+--------+--------+------------+----------+
+| empno | ename    | job     | deptno | sal    | experience | phone_no |
++-------+----------+---------+--------+--------+------------+----------+
+|
